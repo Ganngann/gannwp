@@ -75,14 +75,21 @@ class Gannwp_Activator {
 		// seed table if new
 		// TODO update db if already exist
 		if (!$alreadyexist) {
-			$wpdb->insert(
-				$table_name,
-				array(
-					'name' => 'first param',
-					'valueTXT' => 'param text value',
-					'valueINT' => '1',
-				)
-			);
+			// $wpdb->insert(
+			// 	$table_name,
+			// 	array(
+			// 		'name' => 'first param',
+			// 		'valueTXT' => 'param text value',
+			// 		'valueINT' => '1',
+			// 	)
+			// );
+
+			$wpdb->query("INSERT INTO $table_name
+            (`name`, `valueTXT`, `valueINT`)
+            VALUES
+            ('name-1', 'val-1', '1'),
+            ('name-2', 'val-2', '2'),
+            ('name-3', 'val-3', '3')");
 		}
 
 	}

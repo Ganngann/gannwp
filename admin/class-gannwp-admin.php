@@ -100,4 +100,19 @@ class Gannwp_Admin {
 
 	}
 
+	// Hook the 'admin_menu' action hook, run the function named 'mfp_Add_My_Admin_Link()'
+	// $this->loader->add_action( 'admin_menu', 'gann_add_admin_link' );
+
+	// Add a new top level menu link to the ACP
+	function gann_add_admin_link()
+	{
+	      add_menu_page(
+	        'My First Page', // Title of the page
+	        "GannWP Agora", // Text to show on the menu link
+	        'manage_options', // Capability requirement to see the link
+	        plugin_dir_path(__FILE__) . '/partials/gann_menu.php' // The 'slug' - file to display when clicking the link
+	    );
+	}
+
+
 }
