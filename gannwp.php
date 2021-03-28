@@ -65,6 +65,15 @@ register_deactivation_hook( __FILE__, 'deactivate_gannwp' );
 require plugin_dir_path( __FILE__ ) . 'includes/class-gannwp.php';
 
 /**
+ * Initialize custom templater
+ */
+if( ! class_exists( 'Exopite_Template' ) ) {
+    require_once plugin_dir_path( __FILE__ ) . 'includes/libraries/class-exopite-template.php';
+}
+
+
+
+/**
  * Begins execution of the plugin.
  *
  * Since everything within the plugin is registered via hooks,

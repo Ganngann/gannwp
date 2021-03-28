@@ -74,6 +74,9 @@ class Gannwp {
 		}
 		$this->gannwp = 'gannwp';
 
+		$this->main = $this;
+
+
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
@@ -152,7 +155,7 @@ class Gannwp {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Gannwp_Admin( $this->get_gannwp(), $this->get_version() );
+		$plugin_admin = new Gannwp_Admin( $this->get_gannwp(), $this->get_version(),  $this->main );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
