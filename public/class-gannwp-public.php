@@ -100,4 +100,23 @@ class Gannwp_Public {
 
 	}
 
+	function shortcode_function( $atts ) {
+
+	    $args = shortcode_atts(
+	        array(
+	            'arg1'   => 'arg1',
+	            'arg2'   => 'arg2',
+	        ),
+	        $atts
+	    );
+
+	    // code...
+
+	    $var = ( strtolower( $args['arg1']) != "" ) ? strtolower( $args['arg1'] ) : 'default';
+
+	    // code...
+
+	    return $var;
+	}
+
 }

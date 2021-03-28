@@ -81,6 +81,7 @@ class Gannwp {
 
 	}
 
+
 	/**
 	 * Load the required dependencies for this plugin.
 	 *
@@ -176,7 +177,16 @@ class Gannwp {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
+		/**
+		 * Register shortcode via loader
+		 *
+		 * Use: [short-code-name args]
+		 *
+		 * @link https://github.com/DevinVinson/WordPress-Plugin-Boilerplate/issues/262
+		 */
+		$this->loader->add_shortcode( "shortcode-name", $plugin_public, "shortcode_function", $priority = 10, $accepted_args = 2 );
 	}
+
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
