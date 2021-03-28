@@ -184,7 +184,7 @@ class Gannwp {
 		 *
 		 * @link https://github.com/DevinVinson/WordPress-Plugin-Boilerplate/issues/262
 		 */
-		$this->loader->add_shortcode( "shortcode-name", $plugin_public, "shortcode_function", $priority = 10, $accepted_args = 2 );
+		$this->loader->add_shortcode( "gannwp-agora-users-list", $plugin_public, "shortcode_gannwp_agora_users_list", $priority = 10, $accepted_args = 2 );
 	}
 
 
