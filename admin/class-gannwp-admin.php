@@ -132,13 +132,11 @@ class Gannwp_Admin {
 		add_submenu_page(
 			plugin_dir_path(__FILE__) . '/partials/gann_menu.php',
 			'Plugin settings page title',
-			'Admin area menu slug',
+			'Liste des utilisateurs',
 			'manage_options',
 			plugin_dir_path(__FILE__) . '/partials/gann_submenu.php',
 			// $this->gannwp,
 			// array($this, 'display_plugin_setup_page')
 		);
 	}
-
-
 }
