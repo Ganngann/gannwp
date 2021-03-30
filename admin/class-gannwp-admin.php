@@ -134,7 +134,7 @@ class Gannwp_Admin {
 			'Plugin settings page title',
 			'Liste des utilisateurs',
 			'manage_options',
-			plugin_dir_path(__FILE__) . '/partials/gann_submenu.php',
+			plugin_dir_path(__FILE__) . '/partials/gann_userList.php',
 			// $this->gannwp,
 			// array($this, 'display_plugin_setup_page')
 		);

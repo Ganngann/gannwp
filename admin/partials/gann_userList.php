@@ -10,20 +10,25 @@ var_dump($users)
    <h1>GannWP Agora submenu</h1>
    <form class="" action="index.html" method="post">
       <table>
+         <thead>
+            <?php foreach ($users[0] as $key => $value): ?>
+               <th>
+                   <?php echo $key ?>
+               </th>
+            <?php endforeach; ?>
+         </thead>
          <?php foreach ($users as $key => $user): ?>
+            <tr>
 
             <?php foreach ($user as $key => $field): ?>
-               <tr>
+
 
                   <td>
-                     <label for="<?php echo $key ?>"><?php echo $key ?></label>
-                  </td>
-                  <td>
-                     <input type="text" name="<?php echo $key ?>" value="<?php echo $field ?>">
+                     <?php echo $field ?>
                   </td>
 
-               </tr>
             <?php endforeach; ?>
+         </tr>
 
          <?php endforeach; ?>
       </table>
