@@ -106,37 +106,34 @@ class Gannwp_Admin {
 	// Add a new top level menu link to the ACP
 	function gann_add_admin_links()
 	{
+		wp_enqueue_script('jquery-ui-sortable');
+
 		add_menu_page(
 			'My First Page', // Title of the page
 			"GannWP Agora", // Text to show on the menu link
 			'manage_options', // Capability requirement to see the link
 			plugin_dir_path(__FILE__) . '/partials/gann_menu.php' // The 'slug' - file to display when clicking the link
 		);
-		//  add_menu_page(
-		// 	'My First Page', // Title of the page
-		// 	"GannWP Agora", // Text to show on the menu link
-		// 	'manage_options', // Capability requirement to see the link
-		// 	plugin_dir_path(__FILE__) . '/partials/gann_menu.php' // The 'slug' - file to display when clicking the link
-		// );
-
-		// add_submenu_page(
-		// 	string $parent_slug,
-		// 	string $page_title,
-		// 	string $menu_title,
-		// 	string $capability,
-		// 	string $menu_slug,
-		// 	callable $function = '',
-		// 	int $position = null
-		// );
-
 		add_submenu_page(
 			plugin_dir_path(__FILE__) . '/partials/gann_menu.php',
 			'Plugin settings page title',
 			'Liste des utilisateurs',
 			'manage_options',
 			plugin_dir_path(__FILE__) . '/partials/gann_userList.php',
-			// $this->gannwp,
-			// array($this, 'display_plugin_setup_page')
+		);
+		add_submenu_page(
+			plugin_dir_path(__FILE__) . '/partials/gann_menu.php',
+			'Plugin settings page title',
+			'Champs de profil personalisés',
+			'manage_options',
+			plugin_dir_path(__FILE__) . '/partials/gann_customfields.php',
+		);
+		add_submenu_page(
+			plugin_dir_path(__FILE__) . '/partials/gann_menu.php',
+			'Plugin settings page title',
+			'test',
+			'manage_options',
+			plugin_dir_path(__FILE__) . '/partials/gann_test.php',
 		);
 	}
 }
