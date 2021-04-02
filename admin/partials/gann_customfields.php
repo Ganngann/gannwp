@@ -11,12 +11,20 @@ foreach ($columnListeObj as $key => $value) {
 
 $table_gannwp_users = $wpdb->prefix . "gannwp_users";
 $table_gannwp_users_meta = $wpdb->prefix . "gannwp_users_meta";
-$typesOfInpute = array(
-   'INT' => 'Nombre',
-   'varchar(255)' => 'Texte court',
-   'longtext' => 'Texte long',
+$typesOfData = array(
+   'INT' => array(
+      'input' => 'text',
+      'name' => 'Nombre'
+   ),
+   'varchar(255)' => array(
+      'input' => 'text',
+      'name' => 'Texte court'
+   ),
+   'longtext' => array(
+      'input' => 'textarea',
+      'name' => 'Texte long'
+   )
 );
-
 
 if (isset($_POST["delete"])) {
    $data = str_replace( '-', '_',sanitize_html_class($_POST["delete"]));
@@ -40,8 +48,10 @@ if (isset($_POST["create"])) {
       $wpdb->query($sql);
       $metadata = array(
          'columnName' => $column,
+         'description' => 'la description',
          'name' => $_POST["create"],
-         'dataType' => $typesOfInpute[$_POST["dataType"]]
+         'dataType' => $typesOfData[$_POST["dataType"]]['name'],
+         'inputType' => $typesOfData[$_POST["dataType"]]['input']
       );
 
       $wpdb->insert($table_gannwp_users_meta, $metadata);
@@ -94,8 +104,7 @@ foreach ($gannwp_users_fields as $key => $field) {
 
                   <input type="text" name="name" maxlength="60" value="<?php echo $value->name ?>">
                   <input type="hidden" name="ID" value="<?php echo $value->ID ?>" />
-                  <input type="hidden" name="update" value="" />
-                  <input type="submit" name="" value="Update">
+                  <input type="submit" name="update" value="Update">
                </form>
             </td>
             <td>
@@ -116,14 +125,14 @@ foreach ($gannwp_users_fields as $key => $field) {
                <label for="create">ajouter un champ</label>
                <input type="text" name="create" maxlength="60" value="<?php echo substr(str_shuffle("qwertyuiopasdfghjklzxcvbnm"),0,5); ?>">
                <select class="" name="dataType">
-                  <?php foreach ($typesOfInpute as $key => $value) {?>
-                     <option value=<?php echo $key; ?>><?php echo $value ?></option>
+                  <?php foreach ($typesOfData as $key => $value) {?>
+                     <option value=<?php echo $key; ?>><?php echo $value['name'] ?></option>
                   <?php } ?>
-                  </select>
-                  <input type="submit" name="" value="add">
-               </td>
-            </form>
+               </select>
+               <input type="submit" name="" value="add">
+            </td>
+         </form>
 
-         </tfoot>
-      </table>
-   </div>
+      </tfoot>
+   </table>
+</div>

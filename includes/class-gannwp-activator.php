@@ -121,9 +121,7 @@ class Gannwp_Activator
 			$alreadyexist = true;
 		};
 		$sql = "CREATE TABLE $table_name (
-			-- newID int NOT NULL,
-			userID BIGINT UNSIGNED,
-			-- PRIMARY KEY (newID),
+			userID BIGINT UNSIGNED UNIQUE,
 			FOREIGN KEY (userID) REFERENCES $segond_table_name(ID)
 		) $charset_collate;";
 
@@ -161,6 +159,7 @@ class Gannwp_Activator
 			columnName tinytext NULL,
 			name VARCHAR(60) NULL,
 			dataType VARCHAR(40) NULL,
+			inputType VARCHAR(40) NULL,
 			description VARCHAR(255) NULL,
 			PRIMARY KEY (ID)
 		) $charset_collate;";
@@ -171,9 +170,9 @@ class Gannwp_Activator
 		add_option('gannwp_db_version', $gannwp_db_version);
 
 		$wpdb->query("INSERT INTO $table_name
-			(`columnName`, `name`,`dataType`)
+			(`columnName`, `name`,`dataType`,`inputType`)
 			VALUES
-			('userID', 'Id de l\'utilisateur', 'Nombre')
+			('userID', 'Id de l\'utilisateur', 'Nombre', 'text')
 			");
 	}
 
