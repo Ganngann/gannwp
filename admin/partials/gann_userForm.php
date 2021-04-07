@@ -9,6 +9,8 @@ require_once plugin_dir_path(__FILE__) . '../components/input.php';
 
 $table_users = $wpdb->prefix . "users";
 $table_gannwp_users = $wpdb->prefix . "gannwp_users";
+$gannwp_users_roles = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users_roles", OBJECT);
+
 
 if (isset($_POST["create"])) {
    $data = array(
@@ -89,6 +91,15 @@ $gannwp_users_fields_meta = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gan
             </td>
             <td>
                <input type="email" name="user_email" value="">
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <select class="" name="roleID">
+                  <?php foreach ($gannwp_users_roles as $key => $value) {?>
+                     <option value=<?php echo  $value->ID; ?>><?php echo $value->name ?></option>
+                  <?php } ?>
+               </select>
             </td>
          </tr>
 

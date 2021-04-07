@@ -149,5 +149,12 @@ class Gannwp_Admin {
 			'manage_options',
 			plugin_dir_path(__FILE__) . '/partials/gann_userForm.php',
 		);
+		add_submenu_page(
+			plugin_dir_path(__FILE__) . '/partials/gann_menu.php',
+			'Roles utilisateurs',
+			'Roles utilisateurs',
+			'manage_options',
+			plugin_dir_path(__FILE__) . '/partials/gann_customroles.php',
+		);
 	}
 }
