@@ -73,7 +73,7 @@ $gannwp_users_fields_meta = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gan
 
 ?>
 <div class="wrap">
-   <h1>GannWP Agora submenu</h1>
+   <h1>Ajouter un utilisateur</h1>
 
    <form class="" action="" method="post">
       <table>

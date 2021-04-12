@@ -3,13 +3,37 @@
 global $wpdb;
 
 $table_gannwp_users_roles = $wpdb->prefix . "gannwp_users_roles";
+$table_gannwp_users = $wpdb->prefix . "gannwp_users";
+
 
 if (isset($_POST["delete"])) {
-
    $id = $_POST["ID"];
-   $wpdb->delete( $table_gannwp_users_roles, array( 'id' => $id ) );
 
-   echo '<div id="message" class="updated">le champ a été suprimé</div>';
+
+
+   $users = $wpdb->get_results("SELECT roleID, userID FROM $table_gannwp_users");
+
+   $used = false;
+
+   foreach ($users as $key => $user) {
+      if (isset($user->roleID)) {
+         if ($user->roleID == $id) {
+            echo "<div id='message' class='error'>ce rôle est atribué a l'utilisateur $user->userID</div>";
+            $used = true;
+         }
+      }
+
+   }
+
+
+   if ($used) {
+      echo '<div id="message" class="error">Impossible de suprimer un rôle atribué à un ou des utilisateurs.</div>';
+   } else {
+      $wpdb->delete( $table_gannwp_users_roles, array( 'id' => $id ) );
+
+      echo '<div id="message" class="updated">le rôle a été suprimé</div>';
+   }
+
 }
 
 

@@ -91,13 +91,13 @@ class Gannwp_Activator
 			// 	)
 			// );
 
-			$wpdb->query("INSERT INTO $table_name
-				(`name`, `valueTXT`, `valueINT`)
-				VALUES
-				('name-1', 'val-1', '1'),
-				('name-2', 'val-2', '2'),
-				('name-3', 'val-3', '3')"
-			);
+			// $wpdb->query("INSERT INTO $table_name
+			// 	(`name`, `valueTXT`, `valueINT`)
+			// 	VALUES
+			// 	('name-1', 'val-1', '1'),
+			// 	('name-2', 'val-2', '2'),
+			// 	('name-3', 'val-3', '3')"
+			// );
 		}
 	}
 
@@ -128,7 +128,7 @@ class Gannwp_Activator
 			userID BIGINT UNSIGNED UNIQUE,
 			roleID int UNSIGNED,
 			FOREIGN KEY (userID) REFERENCES $segond_table_name(ID),
-			FOREIGN KEY (roleID) REFERENCES $third_table_name(ID)
+			FOREIGN KEY (roleID) REFERENCES $third_table_name(ID) NULL
 		) $charset_collate;";
 
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -175,7 +175,14 @@ class Gannwp_Activator
 		add_option('gannwp_db_version', $gannwp_db_version);
 
 
-		$wpdb->query("INSERT INTO $table_name (`columnName`, `name`,`dataType`,`inputType`)	VALUES (`userID`, `Id de l\'utilisateur`, `Nombre`, `text`)");
+		$wpdb->query("INSERT INTO $table_name
+			(columnName, name, dataType, inputType ,  description )
+			VALUES
+			('ID', 'Id de l\'utilisateur', 'Nombre', 'text', 'description'),
+			('user_login', 'Login', 'text', 'text', 'description'),
+			('user_email', 'Email', 'text', 'text', 'description'),
+			('user_registered', 'date d\'ajout', 'date', 'text', 'description');
+			");
 	}
 
 
