@@ -128,7 +128,7 @@ class Gannwp_Activator
 			userID BIGINT UNSIGNED UNIQUE,
 			roleID int UNSIGNED,
 			FOREIGN KEY (userID) REFERENCES $segond_table_name(ID),
-			FOREIGN KEY (roleID) REFERENCES $third_table_name(ID) NULL
+			FOREIGN KEY (roleID) REFERENCES $third_table_name(ID)
 		) $charset_collate;";
 
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -161,7 +161,7 @@ class Gannwp_Activator
 		$sql = "CREATE TABLE $table_name (
 			ID int UNSIGNED NOT NULL AUTO_INCREMENT,
 			lastUpdate timestamp NOT NULL default CURRENT_TIMESTAMP,
-			columnName tinytext NULL,
+			COLUMN_NAME tinytext NULL,
 			name VARCHAR(60) NULL,
 			dataType VARCHAR(40) NULL,
 			inputType VARCHAR(40) NULL,
@@ -176,7 +176,7 @@ class Gannwp_Activator
 
 
 		$wpdb->query("INSERT INTO $table_name
-			(columnName, name, dataType, inputType ,  description )
+			(COLUMN_NAME, name, dataType, inputType ,  description )
 			VALUES
 			('ID', 'Id de l\'utilisateur', 'Nombre', 'text', 'description'),
 			('user_login', 'Login', 'text', 'text', 'description'),
@@ -220,8 +220,12 @@ class Gannwp_Activator
 		dbDelta($sql);
 		add_option('gannwp_db_version', $gannwp_db_version);
 
+		$wpdb->query("INSERT INTO $table_name
+			(name, description)
+			VALUES
+			('Admin', 'Administrateur')
+			");
 
-		$wpdb->query("INSERT INTO $table_name (`columnName`, `name`,`dataType`,`inputType`)	VALUES (`userID`, `Id de l\'utilisateur`, `Nombre`, `text`)");
 	}
 
 }

@@ -46,7 +46,7 @@ class Gannwp_Input
    */
    public function __construct($data)
    {
-      $this->columnName = $data->columnName;
+      $this->columnName = $data->COLUMN_NAME;
       $this->description = $data->description;
       $this->name = $data->name;
       $this->dataType = $data->dataType;

@@ -3,48 +3,17 @@
 // 1st Method - Declaring $wpdb as global and using it to execute an SQL query statement that returns a PHP object
 global $wpdb;
 
-$table_gannwp_users = $wpdb->prefix . "gannwp_users";
+if (isset($_POST["user"])) {
 
+   $user = new Gannwp_User($_POST);
+   $user->db();
 
-
-
-
-if (isset($_POST["setRoleToUserId"])) {
-   $id = stripslashes_deep($_POST['setRoleToUserId']); //added stripslashes_deep which removes WP escaping.
-   $data = array(
-      'userID' => $id,
-      'roleID'  => $_POST["roleID"],
-   );
-   $exist = $wpdb->get_row("SELECT * FROM $table_gannwp_users WHERE userID = $id"  );
-   var_dump($exist);
-   if ($exist) {
-      $wpdb->update($table_gannwp_users,$data, array('userID'=>$id));
-   } else {
-      $wpdb->insert($table_gannwp_users,$data);
-   }
-
-
-   echo '<div id="message" class="updated">le rôle a été atribué</div>';
 }
 
-$users = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}users", OBJECT);
-$gannwp_users = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users", OBJECT);
-$gannwp_users_roles = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users_roles", OBJECT);
-$gannwp_users_fields_meta = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users_meta", OBJECT);
+$usersList = new Gannwp_User_list();
+$users = $usersList->getUsers();
+$roles = $usersList->getRoles();
 
-// $path = 'admin.php?page=gannwp%2Fadmin%2Fpartials%2Fgann_userForm.php';
-// $url = admin_url($path);
-
-
-foreach ($gannwp_users as $key => $gannwp_user) {
-   foreach ($users as $key => $user) {
-      if ($user->ID == $gannwp_user->userID) {
-         foreach ($gannwp_user as $key => $value) {
-            $user->$key = $value;
-         }
-      }
-   }
-}
 
 ?>
 <?php
@@ -57,7 +26,7 @@ foreach ($gannwp_users as $key => $gannwp_user) {
    <table>
       <thead>
          <?php $index = 0 ?>
-         <?php foreach ($gannwp_users_fields_meta as $key => $value) : ?>
+         <?php foreach ($usersList->getFields() as $key => $value) : ?>
             <th onclick="sortTable(<?php echo $index ?>)">
                <?php echo $value->name ?>
             </th>
@@ -72,18 +41,19 @@ foreach ($gannwp_users as $key => $gannwp_user) {
          <?php foreach ($users as $key => $user) : ?>
 
             <tr>
-               <?php foreach ($gannwp_users_fields_meta as $key => $field) : ?>
-                  <?php $columnName = $field->columnName; ?>
+               <?php foreach ($usersList->getFields() as $key => $field) : ?>
+                  <?php $columnName = $field->COLUMN_NAME; ?>
                   <td>
                      <form class="" action="" method="post" id="<?php echo $user->ID ?>"></form>
                      <?php echo isset($user->$columnName) ? $user->$columnName : ''; ?>
                   </td>
                <?php endforeach; ?>
                <td>
-                  <input type='hidden' name='setRoleToUserId' value=<?php echo $user->ID ?> form=<?php echo $user->ID ?> />
+                  <input type='hidden' name='user' value="update" form=<?php echo $user->ID ?> />
+                  <input type='hidden' name='userID' value=<?php echo $user->ID ?> form=<?php echo $user->ID ?> />
                   <select class="" name="roleID" onchange="this.form.submit()" form=<?php echo $user->ID ?>>
                      <option value="" >--Choisissez un role--</option>
-                     <?php foreach ($gannwp_users_roles as $key => $value): ?>
+                     <?php foreach ($roles as $key => $value): ?>
                         <option value=<?php echo $value->ID ?> <?php echo isset($user->roleID) && ($value->ID == $user->roleID) ? 'style="font-weight: bold;" selected' : "" ?> >
                            <?php echo $value->name ?>
                         </option>

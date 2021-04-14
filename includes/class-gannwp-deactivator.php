@@ -30,12 +30,58 @@ class Gannwp_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
+
+		Gannwp_Deactivator::dropGannwpUser();
+		Gannwp_Deactivator::dropGannwp_users_meta();
+		Gannwp_Deactivator::dropGannwp_users_roles();
+	}
+
+	/**
+	 * Short Description. (use period)
+	 *
+	 * Long Description.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function dropGannwpUser() {
+
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . "gannwp_params";
+		$table_name = $wpdb->prefix . "gannwp_users";
 		$sql = "DROP TABLE IF EXISTS $table_name";
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
+		$wpdb->query( $sql );
+	}
+
+	/**
+	 * Short Description. (use period)
+	 *
+	 * Long Description.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function dropGannwp_users_meta() {
+
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . "gannwp_users_meta";
+		$sql = "DROP TABLE IF EXISTS $table_name";
+		$wpdb->query( $sql );
+	}
+
+	/**
+	 * Short Description. (use period)
+	 *
+	 * Long Description.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function dropGannwp_users_roles() {
+
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . "gannwp_users_roles";
+		$sql = "DROP TABLE IF EXISTS $table_name";
+		$wpdb->query( $sql );
 	}
 
 }

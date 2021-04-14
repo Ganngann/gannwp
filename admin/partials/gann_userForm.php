@@ -3,13 +3,16 @@
 // 1st Method - Declaring $wpdb as global and using it to execute an SQL query statement that returns a PHP object
 global $wpdb;
 
+// use Admin\Components\Gannwp_Input;
 use Admin\Components\Gannwp_Input;
+
 require_once plugin_dir_path(__FILE__) . '../components/input.php';
 
 
 $table_users = $wpdb->prefix . "users";
 $table_gannwp_users = $wpdb->prefix . "gannwp_users";
-$gannwp_users_roles = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users_roles", OBJECT);
+// $gannwp_users_roles = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users_roles", OBJECT);
+
 
 
 if (isset($_POST["create"])) {
@@ -31,45 +34,16 @@ if (isset($_POST["create"])) {
 
    var_dump($result);
 
-
-   // $id = stripslashes_deep($_POST['ID']); //added stripslashes_deep which removes WP escaping.
-   // $name = stripslashes_deep($_POST['name']);
-   // $wpdb->update($table_gannwp_users_meta, array('ID'=>$id, 'name'=>$name), array('ID'=>$id));
-   // echo '<div id="message" class="updated">le champ a été renomé</div>';
 }
-//
-// if (isset($_POST["create"])) {
-//    $column = str_replace( '-', '_',sanitize_html_class($_POST["create"]));
-//    $dataType = $_POST["dataType"];
-//
-//    if (!in_array($column,$columnListe)) {
-//       $sql = "ALTER TABLE $table_gannwp_users
-//       ADD $column $dataType;";
-//       $wpdb->query($sql);
-//       $metadata = array(
-//          'columnName' => $column,
-//          'description' => 'la description',
-//          'name' => $_POST["create"],
-//          'dataType' => $typesOfData[$_POST["dataType"]]['name'],
-//          'inputType' => $typesOfData[$_POST["dataType"]]['input']
-//       );
-//
-//       $wpdb->insert($table_gannwp_users_meta, $metadata);
-//       echo '<div id="message" class="updated">le champ a été ajouté</div>';
-//    } else {
-//       echo '<div id="message" class="error">Un champ porte déja cet identifiant</div>';
-//    }
-// };
 
+$userClass = new Gannwp_Users;
 
+$gannwp_users_fields = $userClass->getFields();
+$gannwp_users_fields_meta = $userClass->getCustomFields();
+$gannwp_users_roles = $userClass->getRoles();
 
+var_dump($gannwp_users_fields_meta);
 
-
-// $users = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}users", OBJECT);
-
-$gannwp_users = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users", OBJECT);
-$gannwp_users_fields = $wpdb->get_results("SHOW COLUMNS FROM {$wpdb->prefix}gannwp_users;", OBJECT);
-$gannwp_users_fields_meta = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users_meta", OBJECT);
 
 ?>
 <div class="wrap">
@@ -106,7 +80,7 @@ $gannwp_users_fields_meta = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gan
 
          <?php foreach ($gannwp_users_fields_meta as $key => $value):
             $input = new Gannwp_Input($value);
-            if ($value->columnName == 'userID') {
+            if ($value->COLUMN_NAME == 'userID' || $value->COLUMN_NAME == 'ID') {
             }else {
                ?>
                <tr>

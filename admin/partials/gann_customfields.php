@@ -3,10 +3,10 @@
 global $wpdb;
 
 
-$columnListeObj = $wpdb->get_results("SELECT columnName FROM {$wpdb->prefix}gannwp_users_meta", OBJECT);
+$columnListeObj = $wpdb->get_results("SELECT COLUMN_NAME FROM {$wpdb->prefix}gannwp_users_meta", OBJECT);
 $columnListe = array();
 foreach ($columnListeObj as $key => $value) {
-   array_push($columnListe, $value->columnName);
+   array_push($columnListe, $value->COLUMN_NAME);
 }
 
 $table_gannwp_users = $wpdb->prefix . "gannwp_users";
@@ -60,7 +60,7 @@ if (isset($_POST["delete"])) {
          ADD $column $dataType;";
          $wpdb->query($sql);
          $metadata = array(
-            'columnName' => $column,
+            'COLUMN_NAME' => $column,
             'description' => 'la description',
             'name' => $_POST["create"],
             'dataType' => $typesOfData[$_POST["dataType"]]['name'],
@@ -86,7 +86,7 @@ if (isset($_POST["delete"])) {
 
    foreach ($gannwp_users_fields as $key => $field) {
       foreach ($gannwp_users_fields_meta as $key => $field_meta) {
-         if ($field->Field == $field_meta->columnName) {
+         if ($field->Field == $field_meta->COLUMN_NAME) {
             $field->name = $field_meta->name;
          }
       }
@@ -110,7 +110,7 @@ if (isset($_POST["delete"])) {
 
             <tr>
                <td>
-                  <label for="name"><?php echo $value->columnName ?></label>
+                  <label for="name"><?php echo $value->COLUMN_NAME ?></label>
                </td>
                <td>
                   <form class="" action="" method="post">

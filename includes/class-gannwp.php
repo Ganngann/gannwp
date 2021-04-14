@@ -123,6 +123,20 @@ class Gannwp {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-gannwp-public.php';
 
+		/**
+		 * The class responsible for orchestrating the actions and filters of the
+		 * users.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-gannwp-user.php';
+
+		/**
+		 * The class responsible for orchestrating the actions and filters of the
+		 * users.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-gannwp-user-list.php';
+
+
+
 		$this->loader = new Gannwp_Loader();
 
 	}
