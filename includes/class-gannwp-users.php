@@ -96,38 +96,25 @@ class Gannwp_Users
    */
    private function setCustomFields()
    {
-      $customFields = $this->customFields;
 
-      foreach ($customFields as $key => $cfield) {
+      $output = array();
+
+      foreach ($this->customFields as $key => $cfield) {
 
          foreach ($this->fields as $key => $mfield) {
 
             if ($mfield->COLUMN_NAME == $cfield->COLUMN_NAME) {
-               // var_dump($mfield);
-               echo "</br>";
-               var_dump($cfield);
-               echo "</br>";
-               echo "</br>";
 
                foreach ($mfield as $key => $value) {
                   $cfield->$key = $value;
-                  var_dump($cfield);
-                  echo "</br>";
-
                }
-
-               // var_dump($mfield);
-               echo "</br>";
-               var_dump($cfield);
-               echo "</br>";
-               echo "</br>";
+               array_push($output,$cfield);
             }
          }
       }
 
-      $this->customFields = $customFields;
+      $this->customFields = $output;
 
-      var_dump($customFields);
 
    }
 

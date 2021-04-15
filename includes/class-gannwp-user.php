@@ -1,5 +1,8 @@
 <?php
 
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-gannwp-users.php';
+
+
 /**
 * This class defines the user.
 *
@@ -10,7 +13,7 @@
 */
 
 
-class Gannwp_User
+class Gannwp_User extends Gannwp_Users
 {
    /**
    * @var    array
@@ -22,12 +25,6 @@ class Gannwp_User
    */
    private $table ;
 
-
-   /**
-   * @var    string
-   */
-   private $wpdb;
-
    /**
    * Constructor
    *
@@ -35,8 +32,8 @@ class Gannwp_User
    */
    public function __construct($data = array())
    {
-      global $wpdb;
-      $this->wpdb = $wpdb;
+      parent::__construct();
+
       $this->table = $this->wpdb->prefix . "gannwp_users";
       $this->datas = $data;
    }
@@ -64,6 +61,10 @@ class Gannwp_User
          switch ($_POST["user"]) {
             case 'update':
             $this->update();
+            break;
+
+            case 'create':
+            $this->create();
             break;
 
             default:
@@ -107,6 +108,42 @@ class Gannwp_User
 
 
       echo '<div id="message" class="updated">le rôle a été atribué</div>';
+
+   }
+
+   /**
+   * add array of entities
+   *
+   * the given entities will be wrapped in a entity containers.
+   * this entity containers are registred in a map storage by a given entity name.
+   * the entity names are the keys of the given array.
+   *
+   * @param     array         $entities       array of entities, the key of the array will be used as entity name
+   */
+   public function create()
+   {
+
+      $table_users = $this->wpdb->prefix . "users";
+      $table_gannwp_users = $this->wpdb->prefix . "gannwp_users";
+
+
+      $data = array(
+         'user_login' => $this->datas["user_login"],
+         'user_email' => $this->datas["user_email"]
+      );
+
+      $id = wp_create_user($this->datas["user_login"] , wp_rand() , $this->datas["user_email"]);
+
+
+      $newUserData = $this->datas;
+      unset($newUserData['user']);
+      unset($newUserData['user_login']);
+      unset($newUserData['user_email']);
+      $newUserData['userID'] = $id;
+
+      $result = $this->wpdb->insert($table_gannwp_users, $newUserData);
+
+      var_dump($result);
 
    }
 
