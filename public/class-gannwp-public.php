@@ -100,6 +100,13 @@ class Gannwp_Public {
 
 	}
 
+	function register_shortcodes() {
+		// add_shortcode( "gannwp-agora-users-list", $plugin_public, "shortcode_gannwp_agora_users_list", $priority = 10, $accepted_args = 2 );
+		// add_shortcode( "agorawp-user-panel", $this, "shortcode_agorawp_user_panel", $priority = 10, $accepted_args = 2 );
+		add_shortcode( 'gannwp-agora-users-list', array( $this, 'shortcode_gannwp_agora_users_list') );
+		add_shortcode( 'agorawp-user-panel', array( $this, 'shortcode_agorawp_user_panel') );
+	}
+
 	function shortcode_gannwp_agora_users_list( $atts ) {
 
 		$args = shortcode_atts(
@@ -112,6 +119,22 @@ class Gannwp_Public {
 
 		// $var = ( strtolower( $args['arg1']) != "" ) ? strtolower( $args['arg1'] ) : 'default';
 		$var = require plugin_dir_path(__FILE__) . '/partials/shortcode_gannwp_agora_users_list.php';
+
+		// return $var;
+	}
+
+	function shortcode_agorawp_user_panel( $atts ) {
+
+		$args = shortcode_atts(
+			array(
+				'arg1'   => 'arg1',
+				'arg2'   => 'arg2',
+			),
+			$atts
+		);
+
+		// $var = ( strtolower( $args['arg1']) != "" ) ? strtolower( $args['arg1'] ) : 'default';
+		$var = require plugin_dir_path(__FILE__) . '/partials/shortcode_agorawp_user_panel.php';
 
 		// return $var;
 	}

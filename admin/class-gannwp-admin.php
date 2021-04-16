@@ -100,14 +100,6 @@ class Gannwp_Admin {
 
 	}
 
-	// Hook the 'admin_menu' action hook, run the function named 'mfp_Add_My_Admin_Link()'
-	// $this->loader->add_action( 'admin_menu', 'gann_add_admin_links' );
-	//
-	public function azertyujyjiop()
-	{
-		return include plugin_dir_path(__FILE__) . '/partials/gann_userList.php';
-
-	}
 
 
 	// Add a new top level menu link to the ACP

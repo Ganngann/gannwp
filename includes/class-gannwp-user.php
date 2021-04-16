@@ -1,6 +1,8 @@
 <?php
 
 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-gannwp-users.php';
+require_once plugin_dir_path(__FILE__) . 'class-gannwp-input.php';
+
 
 
 /**
@@ -59,12 +61,16 @@ class Gannwp_User extends Gannwp_Users
       if (isset($_POST["user"])) {
 
          switch ($_POST["user"]) {
-            case 'update':
-            $this->update();
+            case 'updateRole':
+            $this->updateRole();
             break;
 
             case 'create':
             $this->create();
+            break;
+
+            case 'update':
+            $this->update();
             break;
 
             default:
@@ -85,7 +91,7 @@ class Gannwp_User extends Gannwp_Users
    *
    * @param     array         $entities       array of entities, the key of the array will be used as entity name
    */
-   public function update()
+   public function updateRole()
    {
 
       $id = $this->datas['userID'];
@@ -146,5 +152,106 @@ class Gannwp_User extends Gannwp_Users
       var_dump($result);
 
    }
+
+   /**
+   * add array of entities
+   *
+   * the given entities will be wrapped in a entity containers.
+   * this entity containers are registred in a map storage by a given entity name.
+   * the entity names are the keys of the given array.
+   *
+   * @param     array         $entities       array of entities, the key of the array will be used as entity name
+   */
+   public function update()
+   {
+
+      $id = $this->datas->ID;
+
+      $newData = $_POST;
+      unset($newData['user']);
+
+
+      $exist = $this->wpdb->get_row("SELECT * FROM $this->table WHERE userID = $id");
+      // var_dump($data);
+      if ($exist) {
+         $this->wpdb->update($this->table,$newData, array('userID'=>$this->datas->ID));
+      } else {
+         $this->wpdb->insert($this->table,$newData);
+      }
+
+      echo '<div id="message" class="updated">les changements ont été enregistrés</div>';
+
+   }
+
+   /**
+   * add array of entities
+   *
+   * the given entities will be wrapped in a entity containers.
+   * this entity containers are registred in a map storage by a given entity name.
+   * the entity names are the keys of the given array.
+   *
+   * @param     array         $entities       array of entities, the key of the array will be used as entity name
+   */
+   public function populate()
+   {
+
+      $user = $this->wpdb->get_row("SELECT * FROM {$this->wpdb->prefix}users WHERE ID = {$this->datas->ID}",  OBJECT);
+      $gannwp_user = $this->wpdb->get_row("SELECT * FROM {$this->wpdb->prefix}gannwp_users WHERE userID = {$this->datas->ID}", OBJECT);
+
+      foreach ($gannwp_user as $key => $value) {
+
+         $user->$key = $value;
+      }
+
+      $this->datas = $user;
+   }
+
+
+   /**
+   * add array of entities
+   *
+   * the given entities will be wrapped in a entity containers.
+   * this entity containers are registred in a map storage by a given entity name.
+   * the entity names are the keys of the given array.
+   *
+   * @param     array         $entities       array of entities, the key of the array will be used as entity name
+   */
+   public function form()
+   {
+      echo <<<HEREDOC
+      <form class="" action="" method="post">
+      <input type='hidden' name='user' value="update" />
+
+      <table>
+      HEREDOC;
+
+      foreach ($this->getCustomFields() as $key => $value):
+         foreach ($this->datas as $key => $theValue) {
+            if ($key == $value->COLUMN_NAME) {
+               $inputValue = $theValue;
+            }
+         }
+         $input = new Gannwp_Input($value);
+
+         echo <<<HEREDOC
+         <tr>
+         <td>
+         <label for="{$input->getColumnName()} "> {$input->getName()} </label>
+         </td>
+         <td>
+         {$input->render($inputValue)}
+         </td>
+         </tr>
+         HEREDOC;
+      endforeach;
+
+      echo <<<HEREDOC
+      </table>
+      <input type="submit" name="" value="envoyer">
+      </form>
+      HEREDOC;
+
+   }
+
 
 }

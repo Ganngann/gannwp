@@ -49,7 +49,7 @@ $roles = $usersList->getRoles();
                   </td>
                <?php endforeach; ?>
                <td>
-                  <input type='hidden' name='user' value="update" form=<?php echo $user->ID ?> />
+                  <input type='hidden' name='user' value="updateRole" form=<?php echo $user->ID ?> />
                   <input type='hidden' name='userID' value=<?php echo $user->ID ?> form=<?php echo $user->ID ?> />
                   <select class="" name="roleID" onchange="this.form.submit()" form=<?php echo $user->ID ?>>
                      <option value="" >--Choisissez un role--</option>
