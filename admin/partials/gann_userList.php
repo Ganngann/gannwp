@@ -6,7 +6,7 @@ global $wpdb;
 if (isset($_POST["user"])) {
 
    $user = new Gannwp_User($_POST);
-   $user->db();
+   $user->action();
 
 }
 

@@ -7,7 +7,7 @@ require_once plugin_dir_path(__FILE__) . '../components/input.php';
 $user = new Gannwp_User($_POST);
 
 if (isset($_POST["user"])) {
-   $user->db();
+   $user->action();
 }
 
 $gannwp_users_fields = $user->getFields();

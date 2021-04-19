@@ -55,7 +55,7 @@ class Gannwp_User extends Gannwp_Users
    *
    * @return    string      user columnName
    */
-   public function db()
+   public function action()
    {
       if (isset($_POST["user"])) {
 
@@ -70,6 +70,10 @@ class Gannwp_User extends Gannwp_Users
 
             case 'update':
             $this->update();
+            break;
+
+            case 'logout':
+            $this->logout();
             break;
 
             default:
@@ -159,17 +163,20 @@ class Gannwp_User extends Gannwp_Users
    */
    public function update()
    {
-
       $id = $this->datas->ID;
 
       $newData = $_POST;
       unset($newData['user']);
 
+      // var_dump($newData);
+
 
       $exist = $this->wpdb->get_row("SELECT * FROM $this->table_gannwp_users WHERE userID = $id");
-      // var_dump($data);
+      // var_dump($newData);
       if ($exist) {
-         $this->wpdb->update($this->table_gannwp_users,$newData, array('userID'=>$this->datas->ID));
+      $hello = $this->wpdb->update($this->table_gannwp_users,$newData, array('userID'=>$this->datas->ID));
+      // var_dump($hello);
+
       } else {
          $this->wpdb->insert($this->table_gannwp_users,$newData);
       }
@@ -241,7 +248,7 @@ class Gannwp_User extends Gannwp_Users
          </td>
          </tr>
          HEREDOC;
-         
+
       endforeach;
 
       echo <<<HEREDOC
@@ -252,5 +259,9 @@ class Gannwp_User extends Gannwp_Users
 
    }
 
+   public function logout(){
+      wp_logout();
+      // echo '<div id="message" class="updated">Vous êtes déconnectés</div>';
+   }
 
 }
