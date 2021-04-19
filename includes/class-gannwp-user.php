@@ -25,7 +25,7 @@ class Gannwp_User extends Gannwp_Users
    /**
    * @var    string
    */
-   private $table ;
+   // private $table ;
 
    /**
    * Constructor
@@ -36,7 +36,6 @@ class Gannwp_User extends Gannwp_Users
    {
       parent::__construct();
 
-      $this->table = $this->wpdb->prefix . "gannwp_users";
       $this->datas = $data;
    }
 
@@ -104,12 +103,12 @@ class Gannwp_User extends Gannwp_Users
 
       // var_dump($id);
 
-      $exist = $this->wpdb->get_row("SELECT * FROM $this->table WHERE userID = $id");
+      $exist = $this->wpdb->get_row("SELECT * FROM $this->table_gannwp_users WHERE userID = $id");
       // var_dump($data);
       if ($exist) {
-         $this->wpdb->update($this->table,$data, array('userID'=>$this->datas['userID']));
+         $this->wpdb->update($this->table_gannwp_users,$data, array('userID'=>$this->datas['userID']));
       } else {
-         $this->wpdb->insert($this->table,$data);
+         $this->wpdb->insert($this->table_gannwp_users,$data);
       }
 
 
@@ -129,10 +128,6 @@ class Gannwp_User extends Gannwp_Users
    public function create()
    {
 
-      $table_users = $this->wpdb->prefix . "users";
-      $table_gannwp_users = $this->wpdb->prefix . "gannwp_users";
-
-
       $data = array(
          'user_login' => $this->datas["user_login"],
          'user_email' => $this->datas["user_email"]
@@ -147,7 +142,7 @@ class Gannwp_User extends Gannwp_Users
       unset($newUserData['user_email']);
       $newUserData['userID'] = $id;
 
-      $result = $this->wpdb->insert($table_gannwp_users, $newUserData);
+      $result = $this->wpdb->insert($this->table_gannwp_users, $newUserData);
 
       var_dump($result);
 
@@ -171,12 +166,12 @@ class Gannwp_User extends Gannwp_Users
       unset($newData['user']);
 
 
-      $exist = $this->wpdb->get_row("SELECT * FROM $this->table WHERE userID = $id");
+      $exist = $this->wpdb->get_row("SELECT * FROM $this->table_gannwp_users WHERE userID = $id");
       // var_dump($data);
       if ($exist) {
-         $this->wpdb->update($this->table,$newData, array('userID'=>$this->datas->ID));
+         $this->wpdb->update($this->table_gannwp_users,$newData, array('userID'=>$this->datas->ID));
       } else {
-         $this->wpdb->insert($this->table,$newData);
+         $this->wpdb->insert($this->table_gannwp_users,$newData);
       }
 
       echo '<div id="message" class="updated">les changements ont été enregistrés</div>';
@@ -195,14 +190,17 @@ class Gannwp_User extends Gannwp_Users
    public function populate()
    {
 
-      $user = $this->wpdb->get_row("SELECT * FROM {$this->wpdb->prefix}users WHERE ID = {$this->datas->ID}",  OBJECT);
-      $gannwp_user = $this->wpdb->get_row("SELECT * FROM {$this->wpdb->prefix}gannwp_users WHERE userID = {$this->datas->ID}", OBJECT);
+      // todo add if not exist
+      $user = $this->wpdb->get_row("SELECT * FROM {$this->table_users} WHERE ID = {$this->datas->ID}",  OBJECT);
+      $gannwp_user = $this->wpdb->get_row("SELECT * FROM {$this->table_gannwp_users} WHERE userID = {$this->datas->ID}", OBJECT);
 
-      foreach ($gannwp_user as $key => $value) {
+      // var_dump($gannwp_user);
 
-         $user->$key = $value;
+      if ($gannwp_user != null) {
+         foreach ($gannwp_user as $key => $value) {
+            $user->$key = $value;
+         }
       }
-
       $this->datas = $user;
    }
 
@@ -221,11 +219,11 @@ class Gannwp_User extends Gannwp_Users
       echo <<<HEREDOC
       <form class="" action="" method="post">
       <input type='hidden' name='user' value="update" />
-
       <table>
       HEREDOC;
 
       foreach ($this->getCustomFields() as $key => $value):
+         $inputValue = "";
          foreach ($this->datas as $key => $theValue) {
             if ($key == $value->COLUMN_NAME) {
                $inputValue = $theValue;
@@ -243,6 +241,7 @@ class Gannwp_User extends Gannwp_Users
          </td>
          </tr>
          HEREDOC;
+         
       endforeach;
 
       echo <<<HEREDOC

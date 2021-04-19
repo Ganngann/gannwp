@@ -53,9 +53,8 @@ class Gannwp_User_list extends Gannwp_Users
    */
    public function setUsers()
    {
-
-      $users = $this->wpdb->get_results("SELECT * FROM {$this->wpdb->prefix}users", OBJECT);
-      $gannwp_users = $this->wpdb->get_results("SELECT * FROM {$this->wpdb->prefix}gannwp_users", OBJECT);
+      $users = $this->wpdb->get_results("SELECT * FROM {$this->table_users}", OBJECT);
+      $gannwp_users = $this->wpdb->get_results("SELECT * FROM {$this->table_gannwp_users}", OBJECT);
 
       foreach ($gannwp_users as $key => $gannwp_user) {
          foreach ($users as $key => $user) {
@@ -68,12 +67,8 @@ class Gannwp_User_list extends Gannwp_Users
       }
 
       foreach ($users as $key => $user) {
-         // $this->users = $user;
          array_push($this->users,$user);
-
       }
-
-      // var_dump($this->users);
    }
 
 }

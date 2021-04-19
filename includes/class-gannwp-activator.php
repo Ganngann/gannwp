@@ -31,12 +31,9 @@ class Gannwp_Activator
 	*/
 	public static function activate()
 	{
-
-		// Gannwp_Activator::create_gannwp_params();
-		Gannwp_Activator::create_gannwp_users_meta();
-		Gannwp_Activator::create_gannwp_users_roles();
-		Gannwp_Activator::create_gannwp_users();
-
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-gannwp-users.php';
+		$users = new Gannwp_Users;
+		$users->activate();
 	}
 
 
@@ -100,132 +97,4 @@ class Gannwp_Activator
 			// );
 		}
 	}
-
-	/**
-	* create_gannwp_users. (use period)
-	*
-	* create and seed gannwp_users table.
-	*
-	* @since    1.0.0
-	*/
-	public static function create_gannwp_users()
-	{
-
-		global $wpdb;
-		$alreadyexist;
-		$table_name = $wpdb->prefix . "gannwp_users";
-		$segond_table_name = $wpdb->prefix . "users";
-		$third_table_name = $wpdb->prefix . "gannwp_users_roles";
-		$gannwp_db_version = '1.0';
-		$charset_collate = $wpdb->get_charset_collate();
-
-		if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-			$alreadyexist = false;
-		} else {
-			$alreadyexist = true;
-		};
-		$sql = "CREATE TABLE $table_name (
-			userID BIGINT UNSIGNED UNIQUE,
-			roleID int UNSIGNED,
-			FOREIGN KEY (userID) REFERENCES $segond_table_name(ID),
-			FOREIGN KEY (roleID) REFERENCES $third_table_name(ID)
-		) $charset_collate;";
-
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-		dbDelta($sql);
-		add_option('gannwp_db_version', $gannwp_db_version);
-	}
-
-	/**
-	* create_gannwp_users_meta. (use period)
-	*
-	* create and seed gannwp_users_meta table.
-	*
-	* @since    1.0.0
-	*/
-	public static function create_gannwp_users_meta()
-	{
-
-		global $wpdb;
-		$alreadyexist;
-		$table_name = $wpdb->prefix . "gannwp_users_meta";
-		$gannwp_db_version = '1.0';
-		$charset_collate = $wpdb->get_charset_collate();
-
-		if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-			$alreadyexist = false;
-		} else {
-			$alreadyexist = true;
-		};
-		$sql = "CREATE TABLE $table_name (
-			ID int UNSIGNED NOT NULL AUTO_INCREMENT,
-			lastUpdate timestamp NOT NULL default CURRENT_TIMESTAMP,
-			COLUMN_NAME tinytext NULL,
-			name VARCHAR(60) NULL,
-			dataType VARCHAR(40) NULL,
-			inputType VARCHAR(40) NULL,
-			description VARCHAR(255) NULL,
-			PRIMARY KEY (ID)
-		) $charset_collate;";
-
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-		dbDelta($sql);
-		add_option('gannwp_db_version', $gannwp_db_version);
-
-
-		$wpdb->query("INSERT INTO $table_name
-			(COLUMN_NAME, name, dataType, inputType ,  description )
-			VALUES
-			('ID', 'Id de l\'utilisateur', 'Nombre', 'text', 'description'),
-			('user_login', 'Login', 'text', 'text', 'description'),
-			('user_email', 'Email', 'text', 'text', 'description'),
-			('user_registered', 'date d\'ajout', 'date', 'text', 'description');
-			");
-	}
-
-
-	/**
-	* create_gannwp_users_roles. (use period)
-	*
-	* create and seed gannwp_users_roles table.
-	*
-	* @since    1.0.0
-	*/
-	public static function create_gannwp_users_roles()
-	{
-
-		global $wpdb;
-		$alreadyexist;
-		$table_name = $wpdb->prefix . "gannwp_users_roles";
-		$gannwp_db_version = '1.0';
-		$charset_collate = $wpdb->get_charset_collate();
-
-		if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-			$alreadyexist = false;
-		} else {
-			$alreadyexist = true;
-		};
-		$sql = "CREATE TABLE $table_name (
-			ID int UNSIGNED NOT NULL AUTO_INCREMENT,
-			lastUpdate timestamp NOT NULL default CURRENT_TIMESTAMP,
-			name VARCHAR(60) NULL,
-			description VARCHAR(255) NULL,
-			PRIMARY KEY (ID)
-		) $charset_collate;";
-
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-		dbDelta($sql);
-		add_option('gannwp_db_version', $gannwp_db_version);
-
-		$wpdb->query("INSERT INTO $table_name
-			(name, description)
-			VALUES
-			('Admin', 'Administrateur')
-			");
-
-	}
-
 }

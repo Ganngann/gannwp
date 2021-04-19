@@ -7,22 +7,13 @@ var_dump($params)
 
 ?>
 
-
-<?php
-
- ?>
-
-
-
-
 <div class="wrap">
-  <h1>GannWP Agora</h1>
-  <form class="" action="index.html" method="post">
+   <h1>GannWP Agora</h1>
+   <form class="" action="index.html" method="post">
+
+      <label for="premierParametre">parametre numero 1</label>
+      <input type="text" name="premierParametre" value="<?php echo $params[0]->valueTXT ?>">
 
 
-<label for="premierParametre">parametre numero 1</label>
-<input type="text" name="premierParametre" value="<?php echo $params[0]->valueTXT ?>">
-
-
- </form>
+   </form>
 </div>
