@@ -35,16 +35,8 @@ endif;
         </thead>
         <tbody id="myTable">
         <?php foreach ($users as $key => $userEl) : ?>
-<!--        --><?php //var_dump($userEl->base_visibility); ?>
-
-//BUG retourne true si $userEl->base_visibility et egale à 0 (ben oui, zero c'est vide)
-            <?php if (!empty($userEl->base_visibility) && $userAuth >= $userEl->base_visibility) : ?>
-
+            <?php if (isset($userEl->base_visibility) && $userAuth >= $userEl->base_visibility) : ?>
                 <tr>
-<!--                    --><?php //var_dump($userEl); ?>
-<!--                    --><?php //var_dump($userAuth); ?>
-
-
                     <?php foreach ($usersList->getFields() as $key => $field) : ?>
                 <?php $columnName = $field->COLUMN_NAME; ?>
                 <td>
