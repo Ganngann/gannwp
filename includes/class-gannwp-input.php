@@ -44,8 +44,13 @@ class Gannwp_Input
    */
    protected $inputType = '';
 
+    /**
+     * @var    string
+     */
+    protected $ID = '';
 
-   /**
+
+    /**
    * Constructor
    *
    * @param   array       $data
@@ -57,6 +62,8 @@ class Gannwp_Input
       $this->name = $data->name;
       $this->dataType = $data->dataType;
       $this->inputType = $data->inputType;
+      $this->ID = $data->ID;
+
    }
 
    /**
@@ -88,6 +95,16 @@ class Gannwp_Input
    {
       return $this->name;
    }
+
+    /**
+     * return input name
+     *
+     * @return    string      input name
+     */
+    public function getID()
+    {
+        return $this->ID;
+    }
 
    /**
    * return input dataType

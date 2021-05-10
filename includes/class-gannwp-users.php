@@ -330,7 +330,7 @@ class Gannwp_Users
         $table_name = $this->table_gannwp_users_fields_visibility;
         $segond_table_name = $this->table_users;
         $third_table_name = $this->table_gannwp_users_meta;
-        $fourth_table_name = $this->table_gannwp_users_roles;
+//        $fourth_table_name = $this->table_gannwp_users_roles;
         $gannwp_db_version = '1.0';
         $charset_collate = $this->wpdb->get_charset_collate();
 
@@ -340,12 +340,11 @@ class Gannwp_Users
             $alreadyexist = true;
         };
         $sql = "CREATE TABLE $table_name (
-         userID BIGINT UNSIGNED UNIQUE,
+         userID BIGINT UNSIGNED,
          fieldID int UNSIGNED,
-         roleID int UNSIGNED,
+         hyerarchy int UNSIGNED,
          FOREIGN KEY (userID) REFERENCES $segond_table_name(ID),
-         FOREIGN KEY (fieldID) REFERENCES $third_table_name(ID),
-         FOREIGN KEY (roleID) REFERENCES $fourth_table_name(ID)
+         FOREIGN KEY (fieldID) REFERENCES $third_table_name(ID)
          ) $charset_collate;";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');

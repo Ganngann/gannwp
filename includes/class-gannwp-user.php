@@ -41,16 +41,6 @@ class Gannwp_User extends Gannwp_Users
      *
      * @return    string      user columnName
      */
-    public function getDatas()
-    {
-        return $this->datas;
-    }
-
-    /**
-     * return user columnName
-     *
-     * @return    string      user columnName
-     */
     public function getAuth()
     {
         return $this->wpdb->get_results("
@@ -59,6 +49,15 @@ class Gannwp_User extends Gannwp_Users
        where ID = {$this->getDatas()->roleID}", OBJECT);
     }
 
+    /**
+     * return user columnName
+     *
+     * @return    string      user columnName
+     */
+    public function getDatas()
+    {
+        return $this->datas;
+    }
 
     /**
      * return user columnName
@@ -84,7 +83,10 @@ class Gannwp_User extends Gannwp_Users
 
                 case 'update':
                     $this->update();
-echo "hello";
+                    break;
+
+                case 'updateFieldVisibility':
+                    $this->updateFieldVisibility();
                     break;
 
                 case 'logout':
@@ -99,6 +101,38 @@ echo "hello";
         }
     }
 
+    /**
+     * add array of entities
+     *
+     * the given entities will be wrapped in a entity containers.
+     * this entity containers are registred in a map storage by a given entity name.
+     * the entity names are the keys of the given array.
+     *
+     * @param array $entities array of entities, the key of the array will be used as entity name
+     */
+    public function update()
+    {
+        $id = $this->datas->ID;
+
+        $newData = $_POST;
+        unset($newData['user']);
+
+        // var_dump($newData);
+
+
+        $exist = $this->wpdb->get_row("SELECT * FROM $this->table_gannwp_users WHERE userID = $id");
+        // var_dump($newData);
+        if ($exist) {
+            $hello = $this->wpdb->update($this->table_gannwp_users, $newData, array('userID' => $this->datas->ID));
+            // var_dump($hello);
+
+        } else {
+            $this->wpdb->insert($this->table_gannwp_users, $newData);
+        }
+
+        echo '<div id="message" class="updated">les changements ont été enregistrés</div>';
+
+    }
 
     /**
      * add array of entities
@@ -167,37 +201,10 @@ echo "hello";
 
     }
 
-    /**
-     * add array of entities
-     *
-     * the given entities will be wrapped in a entity containers.
-     * this entity containers are registred in a map storage by a given entity name.
-     * the entity names are the keys of the given array.
-     *
-     * @param array $entities array of entities, the key of the array will be used as entity name
-     */
-    public function update()
+    public function logout()
     {
-        $id = $this->datas->ID;
-
-        $newData = $_POST;
-        unset($newData['user']);
-
-        // var_dump($newData);
-
-
-        $exist = $this->wpdb->get_row("SELECT * FROM $this->table_gannwp_users WHERE userID = $id");
-        // var_dump($newData);
-        if ($exist) {
-            $hello = $this->wpdb->update($this->table_gannwp_users, $newData, array('userID' => $this->datas->ID));
-            // var_dump($hello);
-
-        } else {
-            $this->wpdb->insert($this->table_gannwp_users, $newData);
-        }
-
-        echo '<div id="message" class="updated">les changements ont été enregistrés</div>';
-
+        wp_logout();
+        // echo '<div id="message" class="updated">Vous êtes déconnectés</div>';
     }
 
     /**
@@ -225,7 +232,6 @@ echo "hello";
         }
         $this->datas = $user;
     }
-
 
     /**
      * add array of entities
@@ -257,10 +263,25 @@ echo "hello";
             echo <<<HEREDOC
          <tr>
          <td>
-         <label for="{$input->getColumnName()} "> {$input->getName()} </label>
+         <label for="{$input->getColumnName()} "> {$input->getName()} {$input->getID()}</label>
          </td>
          <td>
          {$input->render($inputValue)}
+         </td>
+         <td>
+         HEREDOC
+            ?>
+            <select class="" name="hyerarchy" onchange="this.form.submit()" form="field-<?php echo $input->getID() ?>">
+                <option value="">--seuil de visibilité--</option>
+                <?php foreach ($this->roles as $key => $value): ?>
+                    <option value=<?php echo $value->hyerarchy ?> <?php echo isset($user->roleID) && ($value->ID == $user->roleID) ? 'style="font-weight: bold;" selected' : "" ?>>
+                        <?php echo $value->name ?>
+                    </option>
+                <?php endforeach; ?>
+
+            </select>
+            <?php
+            echo <<<HEREDOC
          </td>
          </tr>
          HEREDOC;
@@ -272,36 +293,43 @@ echo "hello";
       <input type="submit" name="" value="envoyer">
       </form>
       HEREDOC;
+        foreach ($this->getCustomFields() as $key => $value):
+            echo "<form method='post' id='field-{$value->ID}'><input type='hidden' name='user' value='updateFieldVisibility' /><input type='hidden' name='userID' value={$this->datas->ID} />";
+            echo "<input type='hidden' name='fieldID' value='{$value->ID}' /></form>";
+        endforeach;
 
     }
 
-    public function logout()
-    {
-        wp_logout();
-        // echo '<div id="message" class="updated">Vous êtes déconnectés</div>';
-    }
-
-    public function base_visibility()
+    /**
+     * add array of entities
+     *
+     * the given entities will be wrapped in a entity containers.
+     * this entity containers are registred in a map storage by a given entity name.
+     * the entity names are the keys of the given array.
+     *
+     * @param array $entities array of entities, the key of the array will be used as entity name
+     */
+    public function updateFieldVisibility()
     {
         $id = $this->datas->ID;
 
         $newData = $_POST;
         unset($newData['user']);
 
-        // var_dump($newData);
+         var_dump($newData);
 
 
-        $exist = $this->wpdb->get_row("SELECT * FROM $this->table_gannwp_users WHERE userID = $id");
-        // var_dump($newData);
+        $exist = $this->wpdb->get_row("SELECT * FROM $this->table_gannwp_users_fields_visibility WHERE userID = $id AND fieldID = {$newData['fieldID']}");
+         var_dump($newData);
         if ($exist) {
-            $hello = $this->wpdb->update($this->table_gannwp_users, $newData, array('userID' => $this->datas->ID));
+            $hello = $this->wpdb->update($this->table_gannwp_users_fields_visibility, $newData, array('userID' => $this->datas->ID, 'fieldID' => $newData['fieldID']));
             // var_dump($hello);
 
         } else {
-            $this->wpdb->insert($this->table_gannwp_users, $newData);
+            $this->wpdb->insert($this->table_gannwp_users_fields_visibility, $newData);
         }
-        echo '<div id="message" class="updated"> base_visibility()</div>';
-        echo '<script>console.log("yeaha")</script>';
+
+        echo '<div id="message" class="updated">les changements ont été enregistrés</div>';
 
     }
 
