@@ -30,7 +30,7 @@ class Gannwp_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
+		Gannwp_Deactivator::dropGannwp_users_fields_visibility();
 		Gannwp_Deactivator::dropGannwpUser();
 		Gannwp_Deactivator::dropGannwp_users_meta();
 		Gannwp_Deactivator::dropGannwp_users_roles();
@@ -80,6 +80,22 @@ class Gannwp_Deactivator {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . "gannwp_users_roles";
+		$sql = "DROP TABLE IF EXISTS $table_name";
+		$wpdb->query( $sql );
+	}
+
+		/**
+	 * Short Description. (use period)
+	 *
+	 * Long Description.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function dropGannwp_users_fields_visibility() {
+
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . "gannwp_users_fields_visibility";
 		$sql = "DROP TABLE IF EXISTS $table_name";
 		$wpdb->query( $sql );
 	}
