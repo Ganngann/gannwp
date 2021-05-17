@@ -12,10 +12,10 @@ $datas->ID = $userId;
 $user = new Gannwp_User($datas);
 $user->populate();
 
-if ($userId != 0):
-$userAuth = $user->getAuth()[0]->visibility;
+if ($userId != 0) :
+    $userAuth = $user->getAuth();
 else:
-$userAuth = 0;
+    $userAuth = 0;
 endif;
 //var_dump($userId);
 //var_dump($userAuth);
@@ -35,14 +35,26 @@ endif;
         </thead>
         <tbody id="myTable">
         <?php foreach ($users as $key => $userEl) : ?>
-            <?php if (isset($userEl->base_visibility) && $userAuth >= $userEl->base_visibility) : ?>
+           <?php
+           $userEl->populate();
+            // var_dump($userEl->base_visibility) ;
+            ?>
+            <?php if (isset($userEl->base_visibility[$userAuth])) : ?>
                 <tr>
                     <?php foreach ($usersList->getFields() as $key => $field) : ?>
-                <?php $columnName = $field->COLUMN_NAME; ?>
+                        <?php $columnName = $field->COLUMN_NAME; ?>
                 <td>
-                    <?php echo isset($userEl->$columnName) ? $userEl->$columnName : ''; ?>
+                   <?php
+                   // var_dump($userEl->getDatas());
+                    ?>
+
+                        <?php
+                        if (isset($userEl->datas_visibility[$field->ID][$userAuth])) {
+                           echo isset($userEl->getDatas()->$columnName) ? $userEl->getDatas()->$columnName : '';
+                        }
+                        ?>
                 </td>
-            <?php endforeach; ?>
+                    <?php endforeach; ?>
             </tr>
             <?php endif; ?>
 

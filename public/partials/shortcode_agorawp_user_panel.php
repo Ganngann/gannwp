@@ -24,7 +24,8 @@ if (isset($_POST["user"])) {
     } else {
         $user->populate();
         ?>
-    <form id="base_visibility" class="" action="" method="post">
+        <?php /*
+        <form id="base_visibility" class="" action="" method="post">
         <input type="hidden" name="user" value="set_base_visibility">
         <input type="hidden" name="userID" value="<?php echo $userId?>">
         <select multiple="multiple" class="sumo" name="base_visibility[]" onchange="this.form.submit()" form="base_visibility">
@@ -34,8 +35,8 @@ if (isset($_POST["user"])) {
                 </option>
             <?php endforeach; ?>
         </select>
-    </form>
-
+        </form>
+        */ ?>
         <?php
         $user->form();
         ?>

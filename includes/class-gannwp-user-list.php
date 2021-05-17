@@ -67,6 +67,37 @@ class Gannwp_User_list extends Gannwp_Users
       }
 
       foreach ($users as $key => $user) {
+
+
+         $userObj = new Gannwp_User($user);
+
+         array_push($this->users,$userObj);
+      }
+      // var_dump($this->users);
+
+   }
+
+
+
+   /**
+   * users list seter
+   */
+   public function oldsetUsers()
+   {
+      $users = $this->wpdb->get_results("SELECT * FROM {$this->table_users}", OBJECT);
+      $gannwp_users = $this->wpdb->get_results("SELECT * FROM {$this->table_gannwp_users}", OBJECT);
+
+      foreach ($gannwp_users as $key => $gannwp_user) {
+         foreach ($users as $key => $user) {
+            if ($user->ID == $gannwp_user->userID) {
+               foreach ($gannwp_user as $key => $value) {
+                  $user->$key = $value;
+               }
+            }
+         }
+      }
+
+      foreach ($users as $key => $user) {
          array_push($this->users,$user);
       }
    }

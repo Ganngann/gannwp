@@ -22,8 +22,7 @@ class Gannwp_User extends Gannwp_Users
     /**
      * @var array
      */
-    protected $datas_visibility = array();
-
+    public $datas_visibility = array();
 
     /**
      * @var string
@@ -40,6 +39,7 @@ class Gannwp_User extends Gannwp_Users
         parent::__construct();
 
         $this->datas = $data;
+
     }
 
     /**
@@ -49,12 +49,7 @@ class Gannwp_User extends Gannwp_Users
      */
     public function getAuth()
     {
-        return $this->wpdb->get_results(
-            "
-		SELECT visibility
-		FROM {$this->table_gannwp_users_roles}
-		 where ID = {$this->getDatas()->roleID}", OBJECT
-        );
+        return $this->datas->roleID;
     }
 
     /**
@@ -247,7 +242,12 @@ class Gannwp_User extends Gannwp_Users
 
             $this->datas_visibility[$value->fieldID][$value->roleID] = $value;
         }
-
+        // var_dump( $this->datas_visibility[5]);
+        if (isset($this->datas_visibility[5])) {
+           $this->base_visibility = $this->datas_visibility[5];
+        }else {
+           // $this->base_visibility = [];
+        }
 
     }
 
@@ -275,7 +275,7 @@ class Gannwp_User extends Gannwp_Users
         // var_dump($this->datas_visibility);
 
 
-        foreach ($this->getCustomFields() as $key => $value):
+        foreach ($this->getFields() as $key => $value):
             $inputValue = "";
             foreach ($this->datas as $key => $theValue) {
                 if ($key == $value->COLUMN_NAME) {
@@ -284,16 +284,22 @@ class Gannwp_User extends Gannwp_Users
             }
             $input = new Gannwp_Input($value);
 
-            echo <<<HEREDOC
+            ?>
 			<tr>
 			<td>
-			<label for="{$input->getColumnName()} "> {$input->getName()} {$input->getID()}</label>
+			<label for="<?php echo $input->getColumnName()?> "> <?php  echo $input->getName()?></label>
 			</td>
 			<td>
-			{$input->render($inputValue)}
+			<?php
+         if ($input->getID() > 5) {
+            echo $input->render($inputValue);
+         }else {
+            echo $inputValue;
+         }
+         ?>
 			</td>
 			<td>
-			HEREDOC;
+			<?php
             // var_dump($this->datas_visibility[$input->getID()]);
 
             ?>
@@ -329,7 +335,7 @@ class Gannwp_User extends Gannwp_Users
 		<input type="submit" name="" value="envoyer">
 		</form>
 		HEREDOC;
-        foreach ($this->getCustomFields() as $key => $value):
+        foreach ($this->getFields() as $key => $value):
             echo "<form method='post' id='field-{$value->ID}'><input type='hidden' name='user' value='updateFieldVisibility' /><input type='hidden' name='userID' value={$this->datas->ID} />";
             echo "<input type='hidden' name='fieldID' value='{$value->ID}' /></form>";
             echo " <script>jQuery('.sumo').SumoSelect({placeholder: 'Qui peut voir ceci', okCancelInMulti: true, selectAll: true});</script>";
