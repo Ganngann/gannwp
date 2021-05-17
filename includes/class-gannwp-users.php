@@ -154,8 +154,7 @@ class Gannwp_Users
     {
         $this->roles = $this->wpdb->get_results("
       SELECT *
-      FROM {$this->table_gannwp_users_roles}
-       order by hyerarchy DESC", OBJECT);
+      FROM {$this->table_gannwp_users_roles}", OBJECT);
     }
 
     /**
@@ -298,7 +297,6 @@ class Gannwp_Users
             ID int UNSIGNED NOT NULL AUTO_INCREMENT,
             lastUpdate timestamp NOT NULL default CURRENT_TIMESTAMP,
             name VARCHAR(60) NULL,
-            hyerarchy int UNSIGNED,
             description VARCHAR(255) NULL,
             PRIMARY KEY (ID)
          ) $charset_collate;";
@@ -310,10 +308,10 @@ class Gannwp_Users
 
         $this->wpdb->query("
          INSERT INTO $table_name
-         (name, hyerarchy, description)
+         (name, description)
          VALUES
-         ('Admin',10, 'Administrateur'),
-         ('Public',0, 'Utilisateur non enregistré')
+         ('Admin', 'Administrateur'),
+         ('Public', 'Utilisateur non enregistré')
          ");
     }
 
@@ -330,7 +328,7 @@ class Gannwp_Users
         $table_name = $this->table_gannwp_users_fields_visibility;
         $segond_table_name = $this->table_users;
         $third_table_name = $this->table_gannwp_users_meta;
-//        $fourth_table_name = $this->table_gannwp_users_roles;
+        $fourth_table_name = $this->table_gannwp_users_roles;
         $gannwp_db_version = '1.0';
         $charset_collate = $this->wpdb->get_charset_collate();
 
@@ -342,9 +340,10 @@ class Gannwp_Users
         $sql = "CREATE TABLE $table_name (
          userID BIGINT UNSIGNED,
          fieldID int UNSIGNED,
-         hyerarchy int UNSIGNED,
+         roleID int UNSIGNED,
          FOREIGN KEY (userID) REFERENCES $segond_table_name(ID),
-         FOREIGN KEY (fieldID) REFERENCES $third_table_name(ID)
+         FOREIGN KEY (fieldID) REFERENCES $third_table_name(ID),
+         FOREIGN KEY (roleID) REFERENCES $fourth_table_name(ID)
          ) $charset_collate;";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');

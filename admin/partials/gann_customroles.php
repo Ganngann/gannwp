@@ -39,7 +39,6 @@ if (isset($_POST["delete"])) {
 if (isset($_POST["create"])) {
     $data = array(
         'description' => $_POST["description"],
-        'hyerarchy' => $_POST["hyerarchy"],
         'name' => $_POST["name"]
     );
 
@@ -55,7 +54,6 @@ if (isset($_POST["update"])) {
     $data = array(
         'description' => $_POST["description"],
         'name' => $_POST["name"],
-        'hyerarchy' => $_POST["hyerarchy"],
         'ID' => $_POST["ID"]
     );
 
@@ -63,7 +61,7 @@ if (isset($_POST["update"])) {
     echo '<div id="message" class="updated">le champ a été renomé</div>';
 }
 
-$gannwp_users_roles = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users_roles order by hyerarchy desc", OBJECT);
+$gannwp_users_roles = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_users_roles", OBJECT);
 
 
 ?>
@@ -87,9 +85,6 @@ $gannwp_users_roles = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_us
                   <input type="text" name="name" maxlength="60" value="<?php echo $value->name ?>">
                </span>
                     <span>
-                  <input type="text" name="hyerarchy" maxlength="60" value="<?php echo $value->hyerarchy ?>">
-               </span>
-                    <span>
                   <input type="text" name="description" maxlength="3" value="<?php echo $value->description ?>">
                </span>
                     <span>
@@ -108,10 +103,6 @@ $gannwp_users_roles = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gannwp_us
                <label for="name">ajouter un role</label>
                <input type="text" name="name" maxlength="60"
                       value="<?php echo substr(str_shuffle("qwertyuiopasdfghjklzxcvbnm"), 0, 5); ?>">
-                               <label for="hyerarchy">ajouter une description</label>
-               <input type="text" name="hyerarchy" maxlength="60"
-                      value="0">
-
                <label for="description">ajouter une description</label>
                <input type="text" name="description" maxlength="60"
                       value="<?php echo substr(str_shuffle("qwertyuiopasdfghjklzxcvbnm"), 0, 5); ?>">

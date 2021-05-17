@@ -74,6 +74,8 @@ class Gannwp_Public {
 		*/
 
 		wp_enqueue_style( $this->gannwp, plugin_dir_url( __FILE__ ) . 'css/gannwp-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'sumoselect', plugin_dir_url( __FILE__ ) . 'css/sumoselect.css', array(), $this->version, 'all' );
+
 
 	}
 
@@ -97,6 +99,8 @@ class Gannwp_Public {
 		*/
 
 		wp_enqueue_script( $this->gannwp, plugin_dir_url( __FILE__ ) . 'js/gannwp-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'sumoselect', plugin_dir_url( __FILE__ ) . 'js/jquery.sumoselect.js', array( 'jquery' ), $this->version, false );
+
 
 	}
 

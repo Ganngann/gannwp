@@ -15,12 +15,18 @@ require_once plugin_dir_path(__FILE__) . 'class-gannwp-input.php';
 class Gannwp_User extends Gannwp_Users
 {
     /**
-     * @var    array
+     * @var array
      */
     protected $datas = array();
 
     /**
-     * @var    string
+     * @var array
+     */
+    protected $datas_visibility = array();
+
+
+    /**
+     * @var string
      */
     // private $table ;
 
@@ -39,20 +45,22 @@ class Gannwp_User extends Gannwp_Users
     /**
      * return user columnName
      *
-     * @return    string      user columnName
+     * @return string user columnName
      */
     public function getAuth()
     {
-        return $this->wpdb->get_results("
-      SELECT hyerarchy
-      FROM {$this->table_gannwp_users_roles}
-       where ID = {$this->getDatas()->roleID}", OBJECT);
+        return $this->wpdb->get_results(
+            "
+		SELECT visibility
+		FROM {$this->table_gannwp_users_roles}
+		 where ID = {$this->getDatas()->roleID}", OBJECT
+        );
     }
 
     /**
      * return user columnName
      *
-     * @return    string      user columnName
+     * @return string user columnName
      */
     public function getDatas()
     {
@@ -62,40 +70,40 @@ class Gannwp_User extends Gannwp_Users
     /**
      * return user columnName
      *
-     * @return    string      user columnName
+     * @return string user columnName
      */
     public function action()
     {
         if (isset($_POST["user"])) {
 
             switch ($_POST["user"]) {
-                case 'set_base_visibility':
-                    $this->update();
-                    break;
+            case 'set_base_visibility':
+                $this->update();
+                break;
 
-                case 'updateRole':
-                    $this->updateRole();
-                    break;
+            case 'updateRole':
+                $this->updateRole();
+                break;
 
-                case 'create':
-                    $this->create();
-                    break;
+            case 'create':
+                $this->create();
+                break;
 
-                case 'update':
-                    $this->update();
-                    break;
+            case 'update':
+                $this->update();
+                break;
 
-                case 'updateFieldVisibility':
-                    $this->updateFieldVisibility();
-                    break;
+            case 'updateFieldVisibility':
+                $this->updateFieldVisibility();
+                break;
 
-                case 'logout':
-                    $this->logout();
-                    break;
+            case 'logout':
+                $this->logout();
+                break;
 
-                default:
-                    // code...
-                    break;
+            default:
+                // code...
+                break;
             }
 
         }
@@ -148,10 +156,10 @@ class Gannwp_User extends Gannwp_Users
 
         $id = $this->datas['userID'];
         // $role = $this->datas['roleID'];
-        $role = $this->datas['roleID'] == '' ? NULL : $this->datas['roleID'];
+        $role = $this->datas['roleID'] == '' ? null : $this->datas['roleID'];
         $data = array(
-            'userID' => $id,
-            'roleID' => $role,
+        'userID' => $id,
+        'roleID' => $role,
         );
 
         // var_dump($id);
@@ -182,8 +190,8 @@ class Gannwp_User extends Gannwp_Users
     {
 
         $data = array(
-            'user_login' => $this->datas["user_login"],
-            'user_email' => $this->datas["user_email"]
+        'user_login' => $this->datas["user_login"],
+        'user_email' => $this->datas["user_email"]
         );
 
         $id = wp_create_user($this->datas["user_login"], wp_rand(), $this->datas["user_email"]);
@@ -222,6 +230,7 @@ class Gannwp_User extends Gannwp_Users
         // todo add if not exist
         $user = $this->wpdb->get_row("SELECT * FROM {$this->table_users} WHERE ID = {$this->datas->ID}", OBJECT);
         $gannwp_user = $this->wpdb->get_row("SELECT * FROM {$this->table_gannwp_users} WHERE userID = {$this->datas->ID}", OBJECT);
+        $gannwp_visibility = $this->wpdb->get_results("SELECT * FROM {$this->table_gannwp_users_fields_visibility} WHERE userID = {$this->datas->ID}", OBJECT);
 
         // var_dump($gannwp_user);
 
@@ -231,6 +240,15 @@ class Gannwp_User extends Gannwp_Users
             }
         }
         $this->datas = $user;
+
+        foreach ($gannwp_visibility as $key => $value) {
+            // echo "<br>";
+            // var_dump($value);
+
+            $this->datas_visibility[$value->fieldID][$value->roleID] = $value;
+        }
+
+
     }
 
     /**
@@ -244,12 +262,18 @@ class Gannwp_User extends Gannwp_Users
      */
     public function form()
     {
+
+
+
         echo <<<HEREDOC
-      <form class="" action="" method="post">
-      <input type='hidden' name='user' value="update" />
-      <input type='hidden' name='userID' value="{$this->datas->ID}" />
-      <table>
-      HEREDOC;
+		<form class="" action="" method="post">
+		<input type='hidden' name='user' value="update" />
+		<input type='hidden' name='userID' value="{$this->datas->ID}" />
+		<table>
+		HEREDOC;
+        // var_dump($this->getCustomFields()[0]);
+        // var_dump($this->datas_visibility);
+
 
         foreach ($this->getCustomFields() as $key => $value):
             $inputValue = "";
@@ -261,44 +285,62 @@ class Gannwp_User extends Gannwp_Users
             $input = new Gannwp_Input($value);
 
             echo <<<HEREDOC
-         <tr>
-         <td>
-         <label for="{$input->getColumnName()} "> {$input->getName()} {$input->getID()}</label>
-         </td>
-         <td>
-         {$input->render($inputValue)}
-         </td>
-         <td>
-         HEREDOC
-            ?>
-            <select class="" name="hyerarchy" onchange="this.form.submit()" form="field-<?php echo $input->getID() ?>">
-                <option value="">--seuil de visibilité--</option>
-                <?php foreach ($this->roles as $key => $value): ?>
-                    <option value=<?php echo $value->hyerarchy ?> <?php echo isset($user->roleID) && ($value->ID == $user->roleID) ? 'style="font-weight: bold;" selected' : "" ?>>
-                        <?php echo $value->name ?>
-                    </option>
-                <?php endforeach; ?>
+			<tr>
+			<td>
+			<label for="{$input->getColumnName()} "> {$input->getName()} {$input->getID()}</label>
+			</td>
+			<td>
+			{$input->render($inputValue)}
+			</td>
+			<td>
+			HEREDOC;
+            // var_dump($this->datas_visibility[$input->getID()]);
 
-            </select>
+            ?>
+
+                 <select multiple="multiple" class="sumo" name="visibility[]" onchange="this.form.submit()" form="field-<?php echo $input->getID() ?>">
+            <?php
+
+            foreach ($this->roles as $key => $role): ?>
+                <?php
+                // var_dump($this->datas_visibility);
+                ?>
+
+
+                 <option value=<?php echo $role->ID ?>  <?php echo isset($this->datas_visibility[$input->getID()][$role->ID]) ? "selected" : "" ?>>
+                <?php echo $role->name;
+
+
+                ?>
+                  </option>
+            <?php endforeach; ?>
+
+                 </select>
             <?php
             echo <<<HEREDOC
-         </td>
-         </tr>
-         HEREDOC;
+			</td>
+			</tr>
+			HEREDOC;
 
         endforeach;
 
         echo <<<HEREDOC
-      </table>
-      <input type="submit" name="" value="envoyer">
-      </form>
-      HEREDOC;
+		</table>
+		<input type="submit" name="" value="envoyer">
+		</form>
+		HEREDOC;
         foreach ($this->getCustomFields() as $key => $value):
             echo "<form method='post' id='field-{$value->ID}'><input type='hidden' name='user' value='updateFieldVisibility' /><input type='hidden' name='userID' value={$this->datas->ID} />";
             echo "<input type='hidden' name='fieldID' value='{$value->ID}' /></form>";
+            echo " <script>jQuery('.sumo').SumoSelect({placeholder: 'Qui peut voir ceci', okCancelInMulti: true, selectAll: true});</script>";
         endforeach;
 
     }
+
+    /**
+     * <option value=<?php echo $role->ID ?> <?php echo isset($this->datas_visibility[$role->ID][$input->getID()]) && ($this->datas_visibility[$role->ID]->fieldID == $input->getID()) ? 'selected' : "" ?>>
+     */
+
 
     /**
      * add array of entities
@@ -313,20 +355,15 @@ class Gannwp_User extends Gannwp_Users
     {
         $id = $this->datas->ID;
 
-        $newData = $_POST;
-        unset($newData['user']);
-
-         var_dump($newData);
-
-
-        $exist = $this->wpdb->get_row("SELECT * FROM $this->table_gannwp_users_fields_visibility WHERE userID = $id AND fieldID = {$newData['fieldID']}");
-         var_dump($newData);
-        if ($exist) {
-            $hello = $this->wpdb->update($this->table_gannwp_users_fields_visibility, $newData, array('userID' => $this->datas->ID, 'fieldID' => $newData['fieldID']));
-            // var_dump($hello);
-
-        } else {
-            $this->wpdb->insert($this->table_gannwp_users_fields_visibility, $newData);
+        $this->wpdb->delete($this->table_gannwp_users_fields_visibility, array( 'userID' => $id,'fieldID' => $_POST['fieldID'] ));
+        if (isset($_POST['visibility'])) {
+            foreach ($_POST['visibility'] as $key => $value) {
+                $newData = $_POST;
+                unset($newData['user']);
+                unset($newData['visibility']);
+                $newData['roleID'] = $value;
+                $this->wpdb->insert($this->table_gannwp_users_fields_visibility, $newData);
+            }
         }
 
         echo '<div id="message" class="updated">les changements ont été enregistrés</div>';

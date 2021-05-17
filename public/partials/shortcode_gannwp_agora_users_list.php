@@ -13,7 +13,7 @@ $user = new Gannwp_User($datas);
 $user->populate();
 
 if ($userId != 0):
-$userAuth = $user->getAuth()[0]->hyerarchy;
+$userAuth = $user->getAuth()[0]->visibility;
 else:
 $userAuth = 0;
 endif;
