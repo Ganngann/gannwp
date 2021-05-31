@@ -17,7 +17,7 @@ class Gannwp_User extends Gannwp_Users
     /**
      * @var array
      */
-    protected $datas = array();
+    public $datas = array();
 
     /**
      * @var array

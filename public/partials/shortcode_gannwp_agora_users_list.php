@@ -23,20 +23,40 @@ endif;
 ?>
 <div class="wrap">
     <h2>GannWP Agora Shortcode</h2>
+    <select multiple="multiple" class="sumo headID" name="visibility[]" ?>">
+    <?php
+
+    foreach ($usersList->getFields() as $key => $value):
+      wp_dump($value);
+
+      ?>
+        <?php
+        var_dump($value);
+        ?>
+            <option selected value="<?php echo $key ?>">
+        <?php
+        echo $value->name;
+        ?>
+            </option>
+        <?php
+    endforeach;
+    ?>
+    </select>
     <table>
-        <thead>
+        <thead class="tralalaHead">
         <?php $index = 0 ?>
         <?php foreach ($usersList->getFields() as $key => $value) : ?>
             <th onclick="sortTable(<?php echo $index ?>)">
                 <?php echo $value->name ?>
+                <!-- <input type="checkbox" checked="checked" /> -->
             </th>
             <?php $index++; ?>
         <?php endforeach; ?>
         </thead>
-        <tbody id="myTable">
+        <tbody id="myTable" class="tralala">
         <?php foreach ($users as $key => $userEl) : ?>
-           <?php
-           $userEl->populate();
+            <?php
+            $userEl->populate();
             // var_dump($userEl->base_visibility) ;
             ?>
             <?php if (isset($userEl->base_visibility[$userAuth])) : ?>
@@ -44,13 +64,12 @@ endif;
                     <?php foreach ($usersList->getFields() as $key => $field) : ?>
                         <?php $columnName = $field->COLUMN_NAME; ?>
                 <td>
-                   <?php
-                   // var_dump($userEl->getDatas());
-                    ?>
-
+                        <?php
+                        // var_dump($userEl->getDatas());
+                        ?>
                         <?php
                         if (isset($userEl->datas_visibility[$field->ID][$userAuth])) {
-                           echo isset($userEl->getDatas()->$columnName) ? $userEl->getDatas()->$columnName : '';
+                            echo isset($userEl->getDatas()->$columnName) ? $userEl->getDatas()->$columnName : '';
                         }
                         ?>
                 </td>
@@ -71,6 +90,30 @@ endif;
                 });
             });
         });
+
+        jQuery(document).on('change', '.headID', function() {
+                jQuery('.tralala tr').each(function() {
+                   jQuery('.tralala td').each(function(index) {
+                      var checked = jQuery('.headID')[0][index].selected;
+                      if(checked) {
+                         jQuery(this).show();
+                     } else {
+                         jQuery(this).hide();
+                     }
+                     });
+                });
+                jQuery('.tralalaHead').each(function() {
+                   jQuery('.tralalaHead th').each(function(index) {
+                      var checked = jQuery('.headID')[0][index].selected;
+                      if(checked) {
+                        jQuery(this).show();
+                     } else {
+                        jQuery(this).hide();
+                     }
+                     });
+                });
+        });
+        jQuery('.sumo').SumoSelect({placeholder: 'Qui peut voir mon profil', okCancelInMulti: true, selectAll: true});
     </script>
 
     <script>

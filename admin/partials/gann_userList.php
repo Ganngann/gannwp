@@ -16,9 +16,7 @@ $roles = $usersList->getRoles();
 
 
 ?>
-<?php
-// var_dump($_POST);
-?>
+
 <div class="wrap">
    <h1>Liste des utilisateurs</h1>
    <input id="myInput" type="text" placeholder="Search..">
@@ -39,22 +37,25 @@ $roles = $usersList->getRoles();
       <tbody id="myTable">
 
          <?php foreach ($users as $key => $user) : ?>
+         <pre><?php
+         // var_dump($users);
+         ?></pre>
 
             <tr>
                <?php foreach ($usersList->getFields() as $key => $field) : ?>
                   <?php $columnName = $field->COLUMN_NAME; ?>
                   <td>
-                     <form class="" action="" method="post" id="<?php echo $user->ID ?>"></form>
-                     <?php echo isset($user->$columnName) ? $user->$columnName : ''; ?>
+                     <form class="" action="" method="post" id="<?php echo $user->datas->ID ?>"></form>
+                     <?php echo isset($user->datas->$columnName) ? $user->datas->$columnName : ''; ?>
                   </td>
                <?php endforeach; ?>
                <td>
-                  <input type='hidden' name='user' value="updateRole" form=<?php echo $user->ID ?> />
-                  <input type='hidden' name='userID' value=<?php echo $user->ID ?> form=<?php echo $user->ID ?> />
-                  <select class="" name="roleID" onchange="this.form.submit()" form=<?php echo $user->ID ?>>
+                  <input type='hidden' name='user' value="updateRole" form=<?php echo $user->datas->ID ?> />
+                  <input type='hidden' name='userID' value=<?php echo $user->datas->ID ?> form=<?php echo $user->datas->ID ?> />
+                  <select class="" name="roleID" onchange="this.form.submit()" form=<?php echo $user->datas->ID ?>>
                      <option value="" >--Choisissez un role--</option>
                      <?php foreach ($roles as $key => $value): ?>
-                        <option value=<?php echo $value->ID ?> <?php echo isset($user->roleID) && ($value->ID == $user->roleID) ? 'style="font-weight: bold;" selected' : "" ?> >
+                        <option value=<?php echo $value->ID ?> <?php echo isset($user->datas->roleID) && ($value->ID == $user->datas->roleID) ? 'style="font-weight: bold;" selected' : "" ?> >
                            <?php echo $value->name ?>
                         </option>
                      <?php endforeach; ?>

@@ -80,3 +80,17 @@ function run_gannwp() {
 
 }
 run_gannwp();
+
+if(!function_exists('wp_dump')) :
+    function wp_dump(){
+        if(func_num_args() === 1)
+        {
+            $a = func_get_args();
+            echo '<pre>', var_dump( $a[0] ), '</pre><hr>';
+        }
+        else if(func_num_args() > 1)
+            echo '<pre>', var_dump( func_get_args() ), '</pre><hr>';
+        else
+            throw Exception('You must provide at least one argument to this function.');
+    }
+endif;
