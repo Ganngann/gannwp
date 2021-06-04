@@ -42,6 +42,9 @@ if (isset($_POST["delete"])) {
    }
 
    if (!$used) {
+      $table_gannwp_users_fields_visibility = $wpdb->prefix . "gannwp_users_fields_visibility";
+
+      $wpdb->delete($table_gannwp_users_fields_visibility, array('fieldID' => $id ));
       $sql = "ALTER TABLE $table_gannwp_users
       DROP COLUMN $data ;";
       $wpdb->query($sql);

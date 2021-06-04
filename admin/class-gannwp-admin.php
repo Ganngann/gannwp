@@ -118,35 +118,35 @@ class Gannwp_Admin {
 			'Liste des utilisateurs',
 			'Liste des utilisateurs',
 			'manage_options',
-			plugin_dir_path(__FILE__) . '/partials/gann_userList.php',
+			plugin_dir_path(__FILE__) . '/partials/gann_userList.php'
 		);
 		add_submenu_page(
 			plugin_dir_path(__FILE__) . '/partials/gann_menu.php',
 			'Champs de profil personalisés',
 			'Champs de profil personalisés',
 			'manage_options',
-			plugin_dir_path(__FILE__) . '/partials/gann_customfields.php',
+			plugin_dir_path(__FILE__) . '/partials/gann_customfields.php'
 		);
 		add_submenu_page(
 			plugin_dir_path(__FILE__) . '/partials/gann_menu.php',
 			'test',
 			'test',
 			'manage_options',
-			plugin_dir_path(__FILE__) . '/partials/gann_test.php',
+			plugin_dir_path(__FILE__) . '/partials/gann_test.php'
 		);
 		add_submenu_page(
 			plugin_dir_path(__FILE__) . '/partials/gann_menu.php',
 			'Ajouter un utilisateur',
 			'Ajouter un utilisateur',
 			'manage_options',
-			plugin_dir_path(__FILE__) . '/partials/gann_userForm.php',
+			plugin_dir_path(__FILE__) . '/partials/gann_userForm.php'
 		);
 		add_submenu_page(
 			plugin_dir_path(__FILE__) . '/partials/gann_menu.php',
 			'Roles utilisateurs',
 			'Roles utilisateurs',
 			'manage_options',
-			plugin_dir_path(__FILE__) . '/partials/gann_customroles.php',
+			plugin_dir_path(__FILE__) . '/partials/gann_customroles.php'
 		);
 	}
 }

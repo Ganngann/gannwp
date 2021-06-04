@@ -23,15 +23,15 @@ endif;
 ?>
 <div class="wrap">
     <h2>GannWP Agora Shortcode</h2>
-    <select multiple="multiple" class="sumo headID" name="visibility[]" ?>">
+    <select multiple="multiple" class="sumo headID" name="visibility[]" placeholder="Quels champs souhaitez vous afficher ?" ?>">
     <?php
 
     foreach ($usersList->getFields() as $key => $value):
-      wp_dump($value);
+      // wp_dump($value);
 
       ?>
         <?php
-        var_dump($value);
+        // var_dump($value);
         ?>
             <option selected value="<?php echo $key ?>">
         <?php
@@ -93,8 +93,8 @@ endif;
 
         jQuery(document).on('change', '.headID', function() {
                 jQuery('.tralala tr').each(function() {
-                   jQuery('.tralala td').each(function(index) {
-                      var checked = jQuery('.headID')[0][index].selected;
+                   jQuery(this).children('td').each(function(i, el) {
+                      var checked = jQuery('.headID')[0][i].selected;
                       if(checked) {
                          jQuery(this).show();
                      } else {
